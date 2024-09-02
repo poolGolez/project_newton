@@ -19,7 +19,6 @@ def search_user(name: str):
     params = {"q": name}
     response = requests.get(f"https://api.github.com/search/users", params=params, headers=headers)
     users = [User(**user, username=user["login"]) for user in (json.loads(response.text)["items"])]
-    users_names = [user.username for user in users]
     return users[0] if len(users) > 0 else None
 
 
@@ -71,6 +70,5 @@ class User:
 
 if __name__ == '__main__':
     username = search_username("Paul Edward Golez")
-    print(username)
-    # repos = list_repositories("poolgolez", mock=True)
-    # print(repos)
+    repos = list_repositories(username, mock=True)
+    print(repos)
