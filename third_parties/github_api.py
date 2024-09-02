@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv('GITHUB_API_KEY')
 
+def search_username(name):
+    user = search_user(name)
+    return user.username if user is not None else None
 
 def search_user(name: str):
     headers = {
@@ -16,10 +19,11 @@ def search_user(name: str):
     params = {"q": name}
     response = requests.get(f"https://api.github.com/search/users", params=params, headers=headers)
     users = [User(**user, username=user["login"]) for user in (json.loads(response.text)["items"])]
-    return users[0]
+    users_names = [user.username for user in users]
+    return users[0] if len(users) > 0 else None
 
 
-def list_repositories(username: str, limit: int = 8, mock: bool = False):
+def list_repositories(username: str, limit: int = 50, mock: bool = False):
     if mock:
         file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "resources/poolgolez_repos.json")
         file = open(file_path, "r")
@@ -38,7 +42,7 @@ def list_repositories(username: str, limit: int = 8, mock: bool = False):
         response = requests.get(f"https://api.github.com/users/{username}/repos", params=params, headers=headers)
         repos = [Repository(**repo) for repo in json.loads(response.text)]
 
-    print(f"There are {len(repos)} repositories.")
+    print(f"There are originally {len(repos)} repositories.")
     repo_count = min(limit, len(repos))
     return repos[:repo_count]
 
@@ -66,5 +70,7 @@ class User:
         self.username = kwargs["username"]
 
 if __name__ == '__main__':
-    repos = list_repositories("poolgolez", mock=True)
-    print(repos)
+    username = search_username("Paul Edward Golez")
+    print(username)
+    # repos = list_repositories("poolgolez", mock=True)
+    # print(repos)
