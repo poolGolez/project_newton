@@ -8,7 +8,9 @@ from third_parties.github_api import search_username
 
 
 
-def lookup_github_username(full_name: str):
+def lookup_github_username(full_name: str, mock:bool=False):
+    if mock:
+        return "poolGolez"
     template = """Given the full name of {name}, find their GitHub username. 
     Your answer should contain the username only.
     """

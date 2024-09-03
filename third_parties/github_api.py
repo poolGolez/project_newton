@@ -36,14 +36,14 @@ def list_repositories(username: str, limit: int = 50, mock: bool = False):
         }
         params = {
             "sort": "updated",
-            "type": "all"
+            "type": "all",
+            "per_page": min(limit, 100)
         }
         response = requests.get(f"https://api.github.com/users/{username}/repos", params=params, headers=headers)
         repos = [Repository(**repo) for repo in json.loads(response.text)]
 
     print(f"There are originally {len(repos)} repositories.")
-    repo_count = min(limit, len(repos))
-    return repos[:repo_count]
+    return repos[:limit]
 
 
 class Repository:
