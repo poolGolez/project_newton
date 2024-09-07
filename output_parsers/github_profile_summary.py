@@ -6,13 +6,13 @@ from pydantic.v1 import BaseModel, Field
 
 class GithubProfileSummary(BaseModel):
     summary: str = Field(description="summary")
-    projects: List[str] = Field(description="name of Github repositories with programming languages used")
+    projects: List[str] = Field(description="Github repositories and description")
     skills: List[str] = Field(description="programming languages used")
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "summary": self.summary,
-            "topProjects": self.projects,
+            "projects": self.projects,
             "languages": self.skills
         }
 

@@ -21,7 +21,7 @@ def fetch_github_info(name: str):
             "format_instructions": summary_parser.get_format_instructions()
         }
     )
-    username = lookup_github_username(name, mock=True)
+    username = lookup_github_username(name)
 
     print(f"Username of {name}: {username}")
     repos = list_repositories(username, limit=50)
@@ -33,11 +33,11 @@ def fetch_github_info(name: str):
         "repo_information": ("\n".join([str(repo) for repo in repos])),
         "name": name
     })
-    print(f"============================ Response ============================")
-    print(response)
-    print(f"===================================================================")
     return response.to_dict()
 
 
 if __name__ == '__main__':
-    fetch_github_info("Paul Edward Golez")
+    response = fetch_github_info("Paul Edward Golez")
+    print(f"{response["summary"]=}")
+    print(f"{response["projects"]=}")
+    print(f"{response["languages"]=}")
